@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Site Blocked</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+        }
+        h1 {
+            color: #d32f2f;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        p {
+            color: #666;
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .time-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #d32f2f;
+            margin-top: 20px;
+        }
+        .time-info h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .time-info p {
+            margin: 5px 0;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚫 BLOCKED</h1>
+        <p><strong>Get back to work!</strong></p>
+        <p>This site is blocked during your work hours to help you stay focused and productive.</p>
+        
+        <div class="time-info">
+            <h3>Blocking Schedule:</h3>
+            <div id="scheduleInfo">
+                <p><strong>Days:</strong> Monday, Tuesday, Thursday, Friday</p>
+                <p><strong>Time:</strong> 5:00 AM - 12:00 PM</p>
+            </div>
+        </div>
+        
+        <p style="margin-top: 30px; font-size: 1em; color: #999;">
+            You can access this site outside of blocking hours.
+        </p>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="blocked.js"></script>
+</body>
+</html> 

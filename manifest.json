@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Website Blocker",
+  "version": "1.0",
+  "description": "Blocks specific websites during certain time periods",
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "*://*.sporza.be/*",
+    "*://*.deredactie.be/*",
+    "*://*.reddit.com/*",
+    "*://*.linkedin.com/*",
+    "*://*.instagram.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Website Blocker",
+    "default_popup": "popup.html"
+  },
+  "web_accessible_resources": [{
+    "resources": ["blocked.html"],
+    "matches": ["<all_urls>"]
+  }],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+} 
