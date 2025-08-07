@@ -9,7 +9,7 @@ const CONFIG = {
     
     // Time range for blocking (24-hour format)
     startHour: 1,  // 1 AM
-    endHour: 15    // 15 PM (noon)
+    endHour: 15    // 3 PM (noon)
   },
   
   // Websites to block (domain names only)

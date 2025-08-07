@@ -30,41 +30,86 @@
       color: #2e7d32;
       border: 1px solid #66bb6a;
     }
-    .schedule {
-      background-color: white;
-      padding: 15px;
+    .section-toggle {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      color: #495057;
+      padding: 12px 16px;
       border-radius: 5px;
-      border: 1px solid #ddd;
-    }
-    .schedule h3 {
-      margin-top: 0;
-      color: #333;
-    }
-    .schedule ul {
-      margin: 10px 0;
-      padding-left: 20px;
-    }
-    .schedule li {
-      margin: 5px 0;
-    }
-    .sites {
-      margin-top: 15px;
-      background-color: white;
-      padding: 15px;
-      border-radius: 5px;
-      border: 1px solid #ddd;
-    }
-    .sites h3 {
-      margin-top: 0;
-      color: #333;
-    }
-    .sites ul {
-      margin: 10px 0;
-      padding-left: 20px;
-    }
-    .sites li {
-      margin: 3px 0;
       font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+      text-align: left;
+      outline: none;
+    }
+    .section-toggle:hover {
+      background: #e9ecef;
+      border-color: #adb5bd;
+    }
+    .section-toggle::after {
+      content: '▼';
+      float: right;
+      transition: transform 0.2s ease;
+      font-size: 12px;
+    }
+    .section-toggle.expanded::after {
+      transform: rotate(180deg);
+    }
+    .section-container {
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      max-height: 0;
+    }
+    .section-container.expanded {
+      max-height: 200px;
+    }
+    .section-content {
+      background-color: white;
+      padding: 15px;
+      border: 1px solid #dee2e6;
+      border-top: none;
+      border-radius: 0 0 5px 5px;
+    }
+    .section-content ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .section-content li {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    .focus-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px 0 rgba(102, 126, 234, 0.3);
+      outline: none;
+    }
+    .focus-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.4);
+    }
+    .focus-btn:active {
+      transform: translateY(0);
+    }
+    .focus-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .debug-content {
+      background-color: #f8f9fa;
+      padding: 10px;
+      font-size: 12px;
     }
   </style>
 </head>
@@ -77,19 +122,49 @@
     Loading...
   </div>
   
-  <div class="schedule">
-    <h3>Blocking Schedule</h3>
-    <ul>
-      <li><strong>Days:</strong> Monday, Tuesday, Thursday, Friday</li>
-      <li><strong>Time:</strong> 5:00 AM - 12:00 PM</li>
-    </ul>
+  <div class="schedule-section" style="margin-top: 15px;">
+    <button id="scheduleToggle" class="section-toggle">
+      📅 Blocking Schedule
+    </button>
+    <div id="scheduleContainer" class="section-container collapsed">
+      <div class="section-content">
+        <ul id="scheduleList">
+          <!-- Schedule will be populated by JavaScript -->
+        </ul>
+      </div>
+    </div>
   </div>
   
-  <div class="sites">
-    <h3>Blocked Sites</h3>
-    <ul id="blockedSitesList">
-      <!-- Sites will be populated by JavaScript -->
-    </ul>
+  <div class="sites-section" style="margin-top: 10px;">
+    <button id="sitesToggle" class="section-toggle">
+      🚫 Blocked Sites
+    </button>
+    <div id="sitesContainer" class="section-container collapsed">
+      <div class="section-content">
+        <ul id="blockedSitesList">
+          <!-- Sites will be populated by JavaScript -->
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="focus-section" id="focusSection" style="margin-top: 15px; text-align: center; display: none;">
+    <button id="focusButton" class="focus-btn">
+      🎯 Let's focus for 1 hour
+    </button>
+  </div>
+  
+  <div class="debug-section" style="margin-top: 10px;">
+    <button id="debugToggle" class="section-toggle">
+      🔧 Debug Info
+    </button>
+    <div id="debugContainer" class="section-container collapsed">
+      <div class="section-content debug-content">
+        <div id="debugInfo">
+          <!-- Debug info will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="config.js"></script>
