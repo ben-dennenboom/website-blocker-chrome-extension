@@ -46,16 +46,20 @@ async function shouldBlockNow() {
   return scheduledBlocking || manualFocus;
 }
 
-// Rule IDs for blocking (need double the amount for www and non-www versions)
-const RULE_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+// Function to generate rule IDs dynamically based on number of blocked sites
+function generateRuleIds() {
+  const numRules = CONFIG.blockedSites.length * 2; // Double for www and non-www versions
+  return Array.from({ length: numRules }, (_, i) => i + 1);
+}
 
 // Function to create blocking rules
 function createBlockingRules() {
   const rules = [];
+  const ruleIds = generateRuleIds();
   CONFIG.blockedSites.forEach((site, index) => {
     // Create rules for both www and non-www versions
     rules.push({
-      id: RULE_IDS[index * 2],
+      id: ruleIds[index * 2],
       priority: 1,
       action: {
         type: "redirect",
@@ -69,7 +73,7 @@ function createBlockingRules() {
       }
     });
     rules.push({
-      id: RULE_IDS[index * 2 + 1],
+      id: ruleIds[index * 2 + 1],
       priority: 1,
       action: {
         type: "redirect",
@@ -92,7 +96,7 @@ async function updateBlockingRules() {
     if (await shouldBlockNow()) {
       // Enable blocking rules
       await chrome.declarativeNetRequest.updateDynamicRules({
-        removeRuleIds: RULE_IDS,
+        removeRuleIds: generateRuleIds(),
         addRules: createBlockingRules()
       });
       console.log('✅ Blocking rules enabled at', new Date().toLocaleString());
@@ -102,7 +106,7 @@ async function updateBlockingRules() {
     } else {
       // Disable blocking rules
       await chrome.declarativeNetRequest.updateDynamicRules({
-        removeRuleIds: RULE_IDS
+        removeRuleIds: generateRuleIds()
       });
       console.log('✅ Blocking rules disabled at', new Date().toLocaleString());
       
@@ -115,7 +119,7 @@ async function updateBlockingRules() {
     // Try to recover by clearing all rules and retrying
     try {
       await chrome.declarativeNetRequest.updateDynamicRules({
-        removeRuleIds: RULE_IDS
+        removeRuleIds: generateRuleIds()
       });
       console.log('🔄 Cleared rules for recovery, will retry on next update');
     } catch (recoveryError) {
@@ -174,7 +178,7 @@ async function restoreBlockingState() {
     } else {
       // Make sure rules are cleared if not blocking
       await chrome.declarativeNetRequest.updateDynamicRules({
-        removeRuleIds: RULE_IDS
+        removeRuleIds: generateRuleIds()
       });
       await chrome.storage.local.set({ blockingActive: false });
       console.log('🔄 Cleared blocking state on startup');
