@@ -184,11 +184,17 @@ async function restoreBlockingState() {
   }
 }
 
-// Update badge and blocking rules every minute
-setInterval(async () => {
-  await updateBadge();
-  await updateBlockingRules();
-}, 60000);
+// Create persistent alarm for checking blocking rules
+chrome.alarms.create('updateBlocking', { periodInMinutes: 1 });
+
+// Handle alarm events
+chrome.alarms.onAlarm.addListener(async (alarm) => {
+  if (alarm.name === 'updateBlocking') {
+    console.log('⏰ Alarm triggered: updating blocking rules and badge');
+    await updateBadge();
+    await updateBlockingRules();
+  }
+});
 
 // Message handler for popup communication
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -238,6 +244,9 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     console.warn('⚠️ Could not clear existing rules on install:', error);
   }
   
+  // Create the persistent alarm
+  chrome.alarms.create('updateBlocking', { periodInMinutes: 1 });
+  
   // Set up initial state
   await updateBlockingRules();
   await updateBadge();
@@ -251,6 +260,10 @@ chrome.runtime.onSuspend.addListener(() => {
 // Initial setup when script loads
 (async () => {
   console.log('🔧 Background script loaded');
+  
+  // Ensure alarm exists (in case service worker restarted)
+  chrome.alarms.create('updateBlocking', { periodInMinutes: 1 });
+  
   await restoreBlockingState();
   await updateBadge();
 })(); 
