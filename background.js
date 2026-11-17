@@ -52,11 +52,19 @@ function generateRuleIds() {
   return Array.from({ length: numRules }, (_, i) => i + 1);
 }
 
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 // Function to create blocking rules
 function createBlockingRules() {
   const rules = [];
   const ruleIds = generateRuleIds();
+  const blockedPageUrl = `${chrome.runtime.getURL('blocked.html')}#\\0`;
+
   CONFIG.blockedSites.forEach((site, index) => {
+    const escapedSite = escapeRegex(site);
+
     // Create rules for both www and non-www versions
     rules.push({
       id: ruleIds[index * 2],
@@ -64,11 +72,11 @@ function createBlockingRules() {
       action: {
         type: "redirect",
         redirect: {
-          url: chrome.runtime.getURL('blocked.html')
+          regexSubstitution: blockedPageUrl
         }
       },
       condition: {
-        urlFilter: `*://${site}/*`,
+        regexFilter: `^https?://${escapedSite}(/.*)?$`,
         resourceTypes: ["main_frame"]
       }
     });
@@ -78,11 +86,11 @@ function createBlockingRules() {
       action: {
         type: "redirect",
         redirect: {
-          url: chrome.runtime.getURL('blocked.html')
+          regexSubstitution: blockedPageUrl
         }
       },
       condition: {
-        urlFilter: `*://www.${site}/*`,
+        regexFilter: `^https?://www\\.${escapedSite}(/.*)?$`,
         resourceTypes: ["main_frame"]
       }
     });
@@ -242,7 +250,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   // Clear any existing rules first
   try {
     await chrome.declarativeNetRequest.updateDynamicRules({
-      removeRuleIds: RULE_IDS
+      removeRuleIds: generateRuleIds()
     });
   } catch (error) {
     console.warn('⚠️ Could not clear existing rules on install:', error);

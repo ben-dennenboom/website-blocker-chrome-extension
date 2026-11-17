@@ -15,4 +15,20 @@ const endTime = formatTime(CONFIG.schedule.endHour);
 document.getElementById('scheduleInfo').innerHTML = `
     <p><strong>Days:</strong> ${blockedDays}</p>
     <p><strong>Time:</strong> ${startTime} - ${endTime}</p>
-`; 
+`;
+
+function showBlockedUrl() {
+  const blockedUrl = window.location.hash.slice(1);
+
+  if (! /^https?:\/\//i.test(blockedUrl)) {
+    return;
+  }
+
+  const link = document.getElementById('blockedUrlLink');
+  link.href = blockedUrl;
+  link.textContent = blockedUrl;
+
+  document.getElementById('blockedUrl').style.display = 'block';
+}
+
+showBlockedUrl();

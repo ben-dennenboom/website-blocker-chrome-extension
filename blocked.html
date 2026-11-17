@@ -39,6 +39,14 @@
             line-height: 1.6;
             margin-bottom: 30px;
         }
+        .blocked-url {
+            display: none;
+            word-break: break-all;
+            margin-bottom: 20px;
+        }
+        .blocked-url a {
+            color: #d32f2f;
+        }
         .time-info {
             background-color: #f8f9fa;
             padding: 15px;
@@ -61,6 +69,10 @@
         <h1>🚫</h1>
         <h2><strong>Get back to work!</strong></h2>
         <p>This site is blocked during your work hours to help you stay focused and productive.</p>
+
+        <p class="blocked-url" id="blockedUrl">
+            <a id="blockedUrlLink"></a>
+        </p>
         
         <div class="time-info">
             <h3>Blocking Schedule:</h3>
